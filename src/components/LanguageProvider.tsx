@@ -1,5 +1,6 @@
 "use client";
 import {createContext,useContext,useEffect,useState} from "react";
+import {seo} from "@/lib/seo";
 type Language="es"|"en";
 const translations:Record<string,string>={
   "Proyectos": "Projects",
@@ -78,7 +79,22 @@ const Context=createContext({language:"es" as Language,t:(text:string)=>text,tog
 export function LanguageProvider({children}:{children:React.ReactNode}){
 const [language,setLanguage]=useState<Language>("es");
 useEffect(()=>{if(localStorage.getItem("language")==="en")setLanguage("en")},[]);
-useEffect(()=>{document.documentElement.lang=language},[language]);
+useEffect(()=>{
+  document.documentElement.lang=language;
+  const metadata=seo[language];
+  document.title=metadata.title;
+  const values: Record<string,string>={
+    'meta[name="description"]':metadata.description,
+    'meta[property="og:title"]':metadata.title,
+    'meta[property="og:description"]':metadata.description,
+    'meta[property="og:locale"]':metadata.locale,
+    'meta[name="twitter:title"]':metadata.title,
+    'meta[name="twitter:description"]':metadata.description,
+  };
+  for(const [selector,content] of Object.entries(values)){
+    document.querySelector(selector)?.setAttribute("content",content);
+  }
+},[language]);
 function toggleLanguage(){const next=language==="es"?"en":"es";setLanguage(next);localStorage.setItem("language",next)}
 return <Context.Provider value={{language,t:(text)=>language==="en"?(translations[text]??text):text,toggleLanguage}}>{children}</Context.Provider>}
 export const useLanguage=()=>useContext(Context);
