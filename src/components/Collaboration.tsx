@@ -1,0 +1,3 @@
+"use client";
+import {useLanguage} from "./LanguageProvider";
+export default function Collaboration(){const {t}=useLanguage();return <section id="colaboracion"><h2>{t("Colaboración")}</h2><p className="sub">{t("Trabajo junto a una diseñadora para entregar producto completo, de la interfaz al despliegue.")}</p><div className="col"><div className="card"><span className="mono">{t("Desarrollo")}</span><h3>Miussette Alfaro</h3><p>{t("Desarrolladora FullStack. Arquitectura, código, datos y despliegue.")}</p></div><div className="card"><span className="mono">{t("Diseño")}</span><h3>Carola Carrasco</h3><p>{t("UI/UX Designer. Investigación, flujos y prototipos en Figma.")}</p></div></div></section>}
